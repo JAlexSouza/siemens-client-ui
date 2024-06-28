@@ -1,9 +1,12 @@
-import ClientCard from "./component/ClientCard";
 import ClientWall from "./component/ClientWall";
+import MainBar from "./component/MainBar";
 
 function App() {
   return (
-    <ClientWall />
+    <>
+      <MainBar />
+      <ClientWall />
+    </>
   );
 }
 
