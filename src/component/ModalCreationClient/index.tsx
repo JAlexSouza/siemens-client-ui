@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useCity } from "../../hooks/useCity";
 import { states } from "../../utils/States";
 import { createClient } from "../../hooks/useClient";
@@ -12,7 +12,7 @@ export default ({ show, handleClose }) => {
   const [city, setCity] = useState<string>();
 
   const { data, isLoading } = useCity(state);
-  const { mutate } = createClient();
+  const { mutate , isPending, isError } = createClient();
 
   const [validated, setValidated] = useState(false);
 
@@ -33,9 +33,17 @@ export default ({ show, handleClose }) => {
           city
         }
       })
+  
       cleanForm();
       setValidated(false);
       handleClose();
+
+      if(!isError) {
+        alert('Cliente adicionado com sucesso!')
+      } else {
+        alert('Algo deu errado. Tente novamente')
+      }
+
     } else {
       setValidated(true);
     }
@@ -168,6 +176,13 @@ export default ({ show, handleClose }) => {
           Cancelar
         </Button>
         <Button variant="primary" onClick={() => createNewClient()}>
+        { isPending ? (<Spinner
+          as="span"
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />) : null } 
           Adicionar
         </Button>
       </Modal.Footer>

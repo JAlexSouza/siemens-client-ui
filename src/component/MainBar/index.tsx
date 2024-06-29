@@ -2,8 +2,9 @@ import styled from "styled-components";
 import SearchBar from "../SearchBar";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { LuPaintbrush } from "react-icons/lu";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ModalCreationClient from "../ModalCreationClient";
+import { ClientContext } from "../../context/ClientContext";
 
 const MainBarStyled = styled.div`
   margin: auto;
@@ -32,6 +33,13 @@ export default () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const { setClientsFilter } = useContext(ClientContext);
+  const [search, setSearch] = useState<string>();
+
+  const cleanSearch = () => {
+    setClientsFilter('');
+    setSearch('')
+  }
 
   return (
     <>
@@ -39,9 +47,9 @@ export default () => {
       <MainBarStyled>
         <MainButtons>
           <IoPersonAddSharp onClick={handleShow} size={20} />
-          <LuPaintbrush size={20} />
+          <LuPaintbrush onClick={() => cleanSearch() } size={20} />
         </MainButtons>
-        <SearchBar />
+        <SearchBar search={search} setSearch={setSearch} />
       </MainBarStyled> 
       <ModalCreationClient show={show} handleClose={handleClose} />      
     </>

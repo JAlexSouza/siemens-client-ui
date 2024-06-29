@@ -1,7 +1,9 @@
 import { Spinner } from "react-bootstrap";
-import { useClient } from "../../hooks/useClient";
+import { getClients, useClient } from "../../hooks/useClient";
 import ClientCard from "../ClientCard";
 import styled from "styled-components";
+import { useContext, useEffect } from "react";
+import { ClientContext } from "../../context/ClientContext";
 
 const CardsContainer = styled.div`
   width: 860px;
@@ -14,7 +16,9 @@ const CardsContainer = styled.div`
 `;
 
 export default () => {
-  const { data, isLoading } = useClient();
+
+  const { isLoading } = getClients();
+  const { clients, clientsFilter } = useContext(ClientContext);
 
   return (
     <CardsContainer>
@@ -24,9 +28,15 @@ export default () => {
         </Spinner>
       ) : (
         <>
-          {data.map((client) => (
-            <ClientCard key={client.id} client={client} />
-          ))}
+          { !!clientsFilter ? (
+            clientsFilter.map((clientFilter) => (
+              <ClientCard key={clientFilter.id} client={clientFilter} />
+            ))
+          ) : (
+            clients.map((client) => (
+              <ClientCard key={client.id} client={client} />
+            ))
+          )}
         </>
       )}
     </CardsContainer>
